@@ -65,7 +65,7 @@ type Document = {
  *
  * @class
  */
-declare class Datastore extends EventEmitter {
+declare class Datastore<G = any> extends EventEmitter {
   /**
    * Datastore constructor...
    *
@@ -101,7 +101,7 @@ declare class Datastore extends EventEmitter {
    * // in an async function
    * await datastore.find({ ... }).sort({ ... })
    */
-  find<T>(query: any, projection?: T): Nedb.Cursor<(T & Document)[]>
+  find<T extends G>(query: any, projection?: T): Nedb.Cursor<(T & Document)[]>
 
   /**
    * Find a document that matches a query.
@@ -109,7 +109,7 @@ declare class Datastore extends EventEmitter {
    * It's basically the same as the original:
    * https://github.com/louischatriot/nedb#finding-documents
    */
-  findOne<T>(query: any, projection?: T): Promise<T & Document>
+  findOne<T extends G>(query: any, projection?: T): Promise<T & Document>
 
   /**
    * Insert a document or documents.
@@ -120,7 +120,7 @@ declare class Datastore extends EventEmitter {
    * @param  {Object|Object[]} docs
    * @return {Promise.<Object|Object[]>}
    */
-  insert<T extends any | any[]>(docs: T): Promise<T & Document>
+  insert<T extends G | G[]>(docs: T): Promise<T & Document>
 
   /**
    * Update documents that match a query.
@@ -134,19 +134,19 @@ declare class Datastore extends EventEmitter {
    * with an array of objects.
    */
 
-  update<T>(
+  update<T extends G>(
     query: any,
     updateQuery: any,
     options?: Nedb.UpdateOptions & { returnUpdatedDocs?: false }
   ): Promise<number>
 
-  update<T>(
+  update<T extends G>(
     query: any,
     updateQuery: any,
     options?: Nedb.UpdateOptions & { returnUpdatedDocs: true; multi?: false }
   ): Promise<T & Document>
 
-  update<T>(
+  update<T extends G>(
     query: any,
     updateQuery: any,
     options?: Nedb.UpdateOptions & { returnUpdatedDocs: true; multi: true }
@@ -188,7 +188,7 @@ declare class Datastore extends EventEmitter {
    * For more information visit:
    * https://github.com/louischatriot/nedb#creatingloading-a-database
    */
-  static create(options: Nedb.DatastoreOptions): Datastore
+  static create<S extends any>(options: Nedb.DatastoreOptions): Datastore<S>
 }
 
 declare namespace Nedb {
